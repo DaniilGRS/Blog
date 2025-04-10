@@ -1,4 +1,4 @@
-@extends('Admin.layouts.layout')
+@extends('admin.layouts.layout')
 
 @section('content')
 
@@ -40,7 +40,7 @@
          Start creating your amazing application!
        </div>
        <!-- /.card-body -->
-       <div class="card-footer">
+       <div class="card-footer clearfix">
          Footer
        </div>
        <!-- /.card-footer-->
