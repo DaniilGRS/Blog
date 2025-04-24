@@ -229,7 +229,6 @@
         @yield('content')
    </div>
 
-  <!-- @yield('content2') -->
 
   <!-- /.content-wrapper -->
 

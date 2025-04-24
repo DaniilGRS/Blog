@@ -22,7 +22,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.categories.create');
     }
 
     /**
@@ -30,7 +30,13 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required',
+        ]);
+        Category::create([
+            'title' => $request->title,
+        ]);
+        return redirect()->route('categories.index')->with('success', 'Категория добавлена');
     }
 
     /**
@@ -46,7 +52,8 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        dd(__METHOD__);
+        $category = Category::find($id);
+        return view('admin.categories.edit', compact('category'));
     }
 
     /**
@@ -54,7 +61,12 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'title' => 'required',
+        ]);
+        $category = Category::find($id);
+        $category->update($request->all());
+        return redirect()->route('categories.index')->with('success', 'Изменения сохранены');
     }
 
     /**
@@ -62,6 +74,7 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        dd(__METHOD__);
+        Category::destroy($id);
+        return redirect()->route('categories.index')->with('success', 'Категория удалена');
     }
 }
