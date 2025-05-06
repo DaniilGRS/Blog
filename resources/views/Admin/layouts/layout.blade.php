@@ -196,7 +196,7 @@
          </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <i class="nav-icon fas fa-table"></i>
               <p>
                 Категории
                 <i class="right fas fa-angle-left"></i>
@@ -213,6 +213,29 @@
                 <a href="{{route('categories.create')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Новая кетегория</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-tag"></i>
+              <p>
+                Теги
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{route('tags.index')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Список тегов</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('tags.create')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Новый тег</p>
                 </a>
               </li>
             </ul>
