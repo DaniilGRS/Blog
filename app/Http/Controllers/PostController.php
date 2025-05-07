@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 
-class TagsController extends Controller
+class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $tags = Tag::paginate(5);
-        return view('admin.tags.index', compact('tags'));
+        $posts = Post::paginate(5);
+        return view('admin.posts.index', compact('posts'));
     }
 
     /**
@@ -21,7 +23,9 @@ class TagsController extends Controller
      */
     public function create()
     {
-        return view('admin.tags.create');
+        $categories = Category::pluck('title', 'id')->all();
+        $tags = Tag::pluck('title', 'id')->all();
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -32,10 +36,10 @@ class TagsController extends Controller
         $request->validate([
             'title' => 'required',
         ]);
-        Tag::create([
-            'title' => $request->title,
-        ]);
-        return redirect()->route('tags.index')->with('success', 'Тег добавлен');
+
+        dd($request->all());
+
+        return redirect()->route('posts.index')->with('success', 'Статья добавлена');
     }
 
     /**
@@ -43,8 +47,7 @@ class TagsController extends Controller
      */
     public function show(string $id)
     {
-        $tag = Tag::find($id);
-        return view('admin.tags.edit', compact('tag'));
+        //
     }
 
     /**
@@ -52,7 +55,7 @@ class TagsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('admin.posts.edit');
     }
 
     /**
@@ -63,9 +66,8 @@ class TagsController extends Controller
         $request->validate([
             'title' => 'required',
         ]);
-        $tag = Tag::find($id);
-        $tag->update($request->all());
-        return redirect()->route('tags.index')->with('success', 'Изменения сохранены');
+
+        return redirect()->route('posts.index')->with('success', 'Изменения сохранены');
     }
 
     /**
@@ -73,7 +75,7 @@ class TagsController extends Controller
      */
     public function destroy(string $id)
     {
-        Tag::destroy($id);
-        return redirect()->route('tags.index')->with('success', 'Тег удален');
+        // Post::destroy($id);
+        return redirect()->route('posts.index')->with('success', 'Статья удалена');
     }
 }
