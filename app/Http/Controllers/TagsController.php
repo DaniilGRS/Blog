@@ -43,8 +43,7 @@ class TagsController extends Controller
      */
     public function show(string $id)
     {
-        $tag = Tag::find($id);
-        return view('admin.tags.edit', compact('tag'));
+        //
     }
 
     /**
@@ -52,7 +51,8 @@ class TagsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $tag = Tag::findOrFail($id);
+        return view('admin.tags.edit', compact('tag'));
     }
 
     /**

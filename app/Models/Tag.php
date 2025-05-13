@@ -17,7 +17,7 @@ class Tag extends Model
 
     public function posts()
     {
-        return $this->hasMany(Post::class);
+        return $this->belongsToMany(Post::class);
     }
 
     public function sluggable(): array

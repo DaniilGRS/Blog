@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -35,9 +36,23 @@ class PostController extends Controller
     {
         $request->validate([
             'title' => 'required',
+            'description' => 'required',
+            'content' => 'required',
+            'category_id' => 'required|integer',
+            'thumbnail' => 'required|image',
         ]);
 
-        dd($request->all());
+        $data = $request->all();
+
+        $data['thumbnail'] = Post::uploadImage($request);
+
+        if ($request->hasFile('thumbnail')) {
+            $folder = date('Y-m-d');
+            $data['thumbnail'] = $request->file('thumbnail')->store("image/{$folder}");
+        }
+
+        $post = Post::create($data);
+        $post->tags()->sync($request->tags);
 
         return redirect()->route('posts.index')->with('success', 'Статья добавлена');
     }
@@ -55,7 +70,10 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        return view('admin.posts.edit');
+        $post = Post::find($id);
+        $categories = Category::pluck('title', 'id')->all();
+        $tags = Tag::pluck('title', 'id')->all();
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -64,18 +82,30 @@ class PostController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'title' => 'required',
+            'title'=>'required',
+            'description'=>'required',
+            'content'=>'required',
+            'category_id'=>'required',
+            'thumbnail'=>'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+        $post = Post::find($id);
+        $data = $request->all();
+        $data['thumbnail'] = Post::uploadImage($request, $post->thumbnail);
 
-        return redirect()->route('posts.index')->with('success', 'Изменения сохранены');
+        $post->update($data);
+        $post->tags()->sync($request->tags);
+        return to_route('posts.index')->with('success', 'Изменения сохранены');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        // Post::destroy($id);
+        $post = Post::find($id);
+        $post->tags()->sync([]);
+        Storage::delete($post->thumbnail);
+        $post->delete();
         return redirect()->route('posts.index')->with('success', 'Статья удалена');
     }
 }
