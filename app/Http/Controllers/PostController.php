@@ -40,18 +40,22 @@ class PostController extends Controller
             'content' => 'required',
             'category_id' => 'required|integer',
             'thumbnail' => 'required|image',
+            'tags' => 'nullable|array',
+            'tags.*' => 'integer|exists:tags,id',
         ]);
 
-        $data = $request->all();
+        $data = $request->except('thumbnail', 'tags'); 
 
-        $data['thumbnail'] = Post::uploadImage($request);
-
+        $imagePath = null; 
         if ($request->hasFile('thumbnail')) {
-            $folder = date('Y-m-d');
-            $data['thumbnail'] = $request->file('thumbnail')->store("image/{$folder}");
+            $folder = 'images/' . date('Y-m-d');
+            
+            $imagePath = $request->file('thumbnail')->store($folder, 'public'); 
         }
+        $data['thumbnail'] = $imagePath;
 
         $post = Post::create($data);
+
         $post->tags()->sync($request->tags);
 
         return redirect()->route('posts.index')->with('success', 'Статья добавлена');

@@ -303,6 +303,15 @@
 <!-- AdminLTE App -->
 <script src="/assets/js/adminlte.min.js"></script>
 
+<script>
+  $(function () {
+    $('.select2').select2()
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+  })
+</script>
+
 <script src="/assets/plugins/select2/js/select2.full.min.js"></script>
 </body>
 </html>
